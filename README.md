@@ -105,8 +105,3 @@ Build a NetworkX graph from `stations_df` and `edges_df`, annotated with ridersh
 | `annual_dfs['2022']` | 427 × 19 | Entry/exit counts, COVID recovery |
 | `annual_dfs['2023']` | 427 × 19 | Entry/exit counts, most recent |
 | `crowding_df` | 272 × 7 | Hourly busyness by station, day, and time band |
-
-## Team
-
-- **Ashton** — project setup, coordination
-- **David** — data ingestion and parsing pipeline
