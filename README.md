@@ -65,6 +65,7 @@ SIG Datathon/
 │       ├── annual_counts_2022.xlsx
 │       ├── annual_counts_2023.xlsx
 │       └── station_crowding.json
+├── Richard python.py              # Spatial demand surface model (Greenwich)
 └── README.md
 ```
 
@@ -94,6 +95,42 @@ Fetches per-station hourly busyness percentages from the TfL Crowding API across
 ### 2. Graph Construction (next step)
 
 Build a NetworkX graph from `stations_df` and `edges_df`, annotated with ridership and crowding data, for network analysis and visualisation.
+
+### 3. Spatial Demand Surface Model (`Richard python.py`)
+
+Focused on the **Royal Borough of Greenwich**, this script identifies where to build a new station by modelling unmet transport demand mathematically.
+
+**Population Density Field ρ(x, y)**
+Constructed as a superposition of Gaussian kernels centred on 13 residential/commercial centres (calibrated to ONS Census 2021), with negative kernels for low-density areas (parks, commons). Covers the borough at ~100 m grid resolution.
+
+**Transport Accessibility Field A(x, y)**
+Gaussian decay function summed over 17 existing stations (Underground, DLR, Elizabeth line, National Rail). Station weights reflect capacity × frequency:
+- Tube: 8.0 | DLR: 4.0–5.5 | Elizabeth line: 5.0 | National Rail: 2.0–4.0
+
+Catchment decay parameter λ controls how quickly accessibility falls off with distance.
+
+**Unmet Demand Surface D(x, y)**
+```
+D(x,y) = ρ(x,y) · (1 − A(x,y) / Amax)
+```
+High where population density is high *and* transport accessibility is low.
+
+**Sensitivity Analysis**
+20 parameter combinations: λ ∈ {400, 600, 800, 1000, 1200} m × 4 station weight schemes (Equal, Mild, Baseline, Steep). Results show the **Kidbrooke–Eltham corridor** as the dominant peak across the majority of combinations.
+
+**Outputs — 4 figures:**
+| File | Description |
+|------|-------------|
+| `fig_demand_heatmap.png` | 2D demand heatmap with stations and proposed location |
+| `fig_demand_3d.png` | 3D demand surface |
+| `fig_sensitivity.png` | Sensitivity grid — winning area per parameter combination |
+| `fig_accessibility.png` | Normalised accessibility field |
+
+**Requirements:** `numpy`, `scipy`, `matplotlib`
+
+```bash
+pip install numpy scipy matplotlib
+```
 
 ## Datasets Summary
 
