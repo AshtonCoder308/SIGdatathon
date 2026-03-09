@@ -1,6 +1,6 @@
 # SIG Datathon — London Underground Network Analysis
 
-Analysis of the TfL (Transport for London) Underground network, focusing on station-level passenger flows and crowding patterns across pre-COVID, recovery, and recent periods (2019, 2022, 2023).
+Analysis of the TfL (Transport for London) Underground network, focusing on station-level passenger flows and crowding patterns across pre-COVID, recovery, and recent periods (2019, 2022, 2023). Recommendation of where to build a new train station. 
 
 ## Project Overview
 
