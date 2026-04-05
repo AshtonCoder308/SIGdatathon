@@ -1,17 +1,4 @@
-"""
-Spatial Demand Surface Model — Royal Borough of Greenwich
-=========================================================
-Datathon 2025/26 | LSESU Mathematics x Data Science
 
-This script:
-  1. Builds a population density field ρ(x,y) from Gaussian kernels
-  2. Builds a transport accessibility field A(x,y) from 17 station nodes
-  3. Computes the unmet demand surface D(x,y) = ρ(x,y) · (1 - A/Amax)
-  4. Runs sensitivity analysis over (λ, weight scheme) — 20 combinations
-  5. Generates 4 publication-quality figures
-
-Requirements: numpy, scipy, matplotlib
-"""
 
 import numpy as np
 from scipy.ndimage import gaussian_filter
@@ -76,15 +63,6 @@ STATIONS = [
 ]
 
 
-# ============================================================
-# 3. POPULATION DENSITY FIELD  ρ(x, y)
-# ============================================================
-# Modelled as superposition of Gaussian kernels centred on known
-# residential/commercial centres, calibrated to ONS Census 2021.
-#
-# ρ(x,y) = ρ₀ + Σ wₖ · exp(−d²/(2σₖ²))
-#
-# Each centre: (lat, lon, weight, spread_metres)
 
 POP_CENTRES = [
     (51.478, -0.010, 1.00, 600),   # Greenwich town centre
@@ -125,14 +103,6 @@ def build_population_field():
     return np.clip(rho, 0.05, None)
 
 
-# ============================================================
-# 4. ACCESSIBILITY FIELD  A(x, y)
-# ============================================================
-# A(x,y) = Σⱼ wⱼ · exp(−d(x,y; xⱼ,yⱼ)² / 2λ²)
-#
-# λ = catchment decay parameter (metres)
-# wⱼ = station weight (capacity × frequency index)
-
 
 def build_accessibility_field(lam, weight_override=None):
     """
@@ -163,12 +133,6 @@ def build_accessibility_field(lam, weight_override=None):
     return accessibility, acc_norm
 
 
-# ============================================================
-# 5. DEMAND SURFACE  D(x, y)
-# ============================================================
-# D(x,y) = ρ(x,y) · (1 − A(x,y)/Amax)
-# High where population is high AND accessibility is low.
-
 
 def build_demand_surface(rho, acc_norm, smooth_sigma=2):
     """Compute unmet demand and apply Gaussian smoothing."""
@@ -183,9 +147,6 @@ def find_peak(demand):
     return lats[idx[0]], lons[idx[1]], demand[idx]
 
 
-# ============================================================
-# 6. BUILD BASELINE MODEL
-# ============================================================
 
 print("\n=== Building baseline model (λ=800m, capacity-frequency weights) ===")
 
@@ -198,12 +159,6 @@ print(f"Peak unmet demand: ({peak_lat:.4f}°N, {peak_lon:.4f}°E)")
 print(f"Peak demand value: {peak_val:.3f}")
 
 
-# ============================================================
-# 7. SENSITIVITY ANALYSIS
-# ============================================================
-# Vary: λ ∈ {400, 600, 800, 1000, 1200}
-#       weight scheme ∈ {Equal, Mild, Baseline, Steep}
-# → 20 combinations
 
 LAMBDAS = [400, 600, 800, 1000, 1200]
 
@@ -286,9 +241,6 @@ print(f"Peak longitude: mean={np.mean(peak_lons):.4f}°E, "
       f"std={np.std(peak_lons):.4f}°")
 
 
-# ============================================================
-# 8. FIGURES
-# ============================================================
 
 # Plotting constants
 plt.rcParams['font.family'] = 'serif'
