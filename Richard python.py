@@ -8,11 +8,6 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from collections import Counter
 
-# ============================================================
-# 1. GRID SETUP
-# ============================================================
-# Borough bounds (approx): lat 51.43–51.50, lon −0.02 to 0.13
-# Resolution: ~100m (0.001° lat ≈ 111m, 0.0015° lon ≈ 104m at 51.5°N)
 
 LAT_MIN, LAT_MAX = 51.430, 51.500
 LON_MIN, LON_MAX = -0.020, 0.130
@@ -28,15 +23,6 @@ print(f"Lat range: [{lats[0]:.3f}, {lats[-1]:.3f}]")
 print(f"Lon range: [{lons[0]:.4f}, {lons[-1]:.4f}]")
 
 
-# ============================================================
-# 2. STATION DATA
-# ============================================================
-# Each station: (latitude, longitude, base_weight, name, mode)
-# Weights reflect capacity × frequency hierarchy (see report)
-#   Tube: 8.0    | ~36,000 pax/hr (1200/train × 30 tph)
-#   Elizabeth: 5.0| ~18,000 pax/hr (1500/train × 12 tph)
-#   DLR: 4.0–5.5 | ~10,500 pax/hr (600/train × 15–20 tph)
-#   Rail: 2.0–3.5| ~4,000 pax/hr  (800/train × 4–6 tph)
 
 STATIONS = [
     # Tube
